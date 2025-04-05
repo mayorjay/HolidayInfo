@@ -28,7 +28,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,6 +45,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josycom.mayorjay.holidayinfo.R
 import com.josycom.mayorjay.holidayinfo.data.model.Country
@@ -60,9 +60,9 @@ fun OverviewScreen(
     viewModel: OverviewViewModel = viewModel(),
     onProceedClicked: (String, String) -> Unit = { _, _ -> }
 ) {
-    val countryResource by viewModel.uiData.observeAsState(Resource.Loading())
-    val showPopup by viewModel.showPopup.observeAsState(false)
-    val country by viewModel.country.observeAsState("")
+    val countryResource by viewModel.uiData.collectAsStateWithLifecycle()
+    val showPopup by viewModel.showPopup.collectAsStateWithLifecycle()
+    val country by viewModel.country.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
@@ -202,7 +202,7 @@ fun YearPopupDialog(
             .padding(15.dp)
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = stringResource(R.string.please_select_a_preferred_year_from_the_list),

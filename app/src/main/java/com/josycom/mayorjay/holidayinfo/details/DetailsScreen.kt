@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -32,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josycom.mayorjay.holidayinfo.R
 import com.josycom.mayorjay.holidayinfo.data.model.Holiday
@@ -51,7 +51,7 @@ fun DetailsScreen(
     country: String,
     year: String
 ) {
-    val holidayResource by viewModel.uiData.observeAsState(Resource.Loading())
+    val holidayResource by viewModel.uiData.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.getHolidays(HolidayRequest(country.substringAfter(":"), year))

@@ -1,13 +1,14 @@
 package com.josycom.mayorjay.holidayinfo.overview
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.josycom.mayorjay.holidayinfo.data.model.Country
 import com.josycom.mayorjay.holidayinfo.data.repository.HolidayInfoRepository
 import com.josycom.mayorjay.holidayinfo.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -15,14 +16,14 @@ import javax.inject.Inject
 @HiltViewModel
 class OverviewViewModel @Inject constructor(private val repository: HolidayInfoRepository) : ViewModel() {
 
-    private var _uiData: MutableLiveData<Resource<List<Country>>> = MutableLiveData()
-    val uiData: LiveData<Resource<List<Country>>> = _uiData
+    private val _uiData: MutableStateFlow<Resource<List<Country>>> = MutableStateFlow(Resource.Loading())
+    val uiData: StateFlow<Resource<List<Country>>> = _uiData.asStateFlow()
 
-    private val _showPopup: MutableLiveData<Boolean> = MutableLiveData(false)
-    val showPopup: LiveData<Boolean> = _showPopup
+    private val _showPopup: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showPopup: StateFlow<Boolean> = _showPopup.asStateFlow()
 
-    private val _country: MutableLiveData<String> = MutableLiveData("")
-    val country: LiveData<String> = _country
+    private val _country: MutableStateFlow<String> = MutableStateFlow("")
+    val country: StateFlow<String> = _country.asStateFlow()
 
     init {
         getCountries()
@@ -32,7 +33,7 @@ class OverviewViewModel @Inject constructor(private val repository: HolidayInfoR
         viewModelScope.launch {
             val countryFlow = repository.getCountries()
             countryFlow.collect { resource ->
-                _uiData.value = resource
+                _uiData.emit(resource)
             }
         }
     }
@@ -49,11 +50,11 @@ class OverviewViewModel @Inject constructor(private val repository: HolidayInfoR
     }
 
     fun updatePopup(value: Boolean) {
-        _showPopup.value = value
+        _showPopup.tryEmit(value)
     }
 
     fun updateCountry(value: String) {
-        _country.value = value
+        _country.tryEmit(value)
         updatePopup(true)
     }
 }
