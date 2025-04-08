@@ -1,16 +1,20 @@
 package com.josycom.mayorjay.holidayinfo.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.josycom.mayorjay.holidayinfo.R
+import androidx.navigation.compose.rememberNavController
+import com.josycom.mayorjay.holidayinfo.ui.nav.HolidayInfoNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContent {
+            HolidayInfoNavHost(navController = rememberNavController())
+        }
     }
 }

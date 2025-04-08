@@ -19,14 +19,11 @@ class OverviewViewModel @Inject constructor(private val repository: HolidayInfoR
     private val _uiData: MutableStateFlow<Resource<List<Country>>> = MutableStateFlow(Resource.Loading())
     val uiData: StateFlow<Resource<List<Country>>> = _uiData.asStateFlow()
 
-    private val _showPopup: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val showPopup: StateFlow<Boolean> = _showPopup.asStateFlow()
-
-    private val _country: MutableStateFlow<String> = MutableStateFlow("")
-    val country: StateFlow<String> = _country.asStateFlow()
+    val yearList = mutableListOf<String>()
 
     init {
         getCountries()
+        populateYearList()
     }
 
     fun getCountries() {
@@ -38,23 +35,13 @@ class OverviewViewModel @Inject constructor(private val repository: HolidayInfoR
         }
     }
 
-    fun populateYearList(): MutableList<String> {
-        val yearList = mutableListOf<String>()
+    private fun populateYearList() {
+        yearList.clear()
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         val firstYear = currentYear - 50
         val lastYear = currentYear + 50
         for (year in firstYear..lastYear) {
             yearList.add(year.toString())
         }
-        return yearList
-    }
-
-    fun updatePopup(value: Boolean) {
-        _showPopup.tryEmit(value)
-    }
-
-    fun updateCountry(value: String) {
-        _country.tryEmit(value)
-        updatePopup(true)
     }
 }

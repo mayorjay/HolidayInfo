@@ -31,8 +31,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josycom.mayorjay.holidayinfo.R
 import com.josycom.mayorjay.holidayinfo.data.model.Holiday
 import com.josycom.mayorjay.holidayinfo.data.remote.models.HolidayRequest
@@ -47,7 +47,7 @@ import java.util.Locale
 
 @Composable
 fun DetailsScreen(
-    viewModel: DetailsViewModel = viewModel(),
+    viewModel: DetailsViewModel = hiltViewModel(),
     country: String,
     year: String
 ) {
